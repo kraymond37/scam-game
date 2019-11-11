@@ -316,8 +316,8 @@ def get_user(address):
     user['free_amount'] = user_invests_dict[address]['free_amount']
     user['static_bonus'] = user_invests_dict[address]['static_bonus']
     user['share_bonus'] = user_invests_dict[address]['share_bonus']
-    user['start_time'] = time.asctime(time.localtime(user_invests_dict[address]['start_time']))
-    user['end_time'] = time.asctime(time.localtime(user_invests_dict[address]['end_time']))
+    user['start_time'] = user_invests_dict[address]['start_time']
+    user['end_time'] = user_invests_dict[address]['end_time']
 
     return response(data=user)
 
