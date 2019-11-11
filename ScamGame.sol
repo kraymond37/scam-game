@@ -271,6 +271,7 @@ contract ScamGame is WhitelistAdminRole {
 			uint minLimit = minInvest > lastFreeAmount.mul(70).div(100) ? minInvest : lastFreeAmount.mul(70).div(100);
 			uint lastInvest = userInvest.freezeAmount.div(100 - freeScale).mul(100);
 			uint maxLimit = maxInvest < lastInvest + 5 * ethWei ? maxInvest : lastInvest + 5 * ethWei;
+			maxLimit = maxLimit.sub(userInvest.freezeAmount);
 			require(msg.value >= minLimit && msg.value <= maxLimit, "between xxx and xxx");
 
 			userInvest.freezeAmount = userInvest.freezeAmount.add(msg.value);
