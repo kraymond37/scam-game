@@ -292,21 +292,24 @@ contract ScamGame is WhitelistAdminRole {
 		userInvest.staticBonus= userInvest.staticBonus.add(userInvest.freezeAmount.mul(staticScale).div(100));
 		calcReward(msg.sender);
 
-		userInvest.freeAmount= userInvest.freeAmount.add(userInvest.freezeAmount.mul(freeScale).div(100));
+		uint sendValue = userInvest.freezeAmount.mul(freeScale).div(100);
 		userInvest.freezeAmount = userInvest.freezeAmount.mul(100 - freeScale).div(100);
 		userInvest.startTime = 0;
 		userInvest.endTime = 0;
+
+		address payable userAddress = msg.sender;
+		sendValue = sendValue.min(address(this).balance);
+		userAddress.transfer(sendValue);
 	}
 
 	function withdraw() external isHuman {
 		UserInvest storage userInvest = userInvestList[msg.sender];
-		uint sendValue = userInvest.staticBonus.add(userInvest.shareBonus).add(userInvest.levelReward).add(userInvest.freeAmount);
+		uint sendValue = userInvest.staticBonus.add(userInvest.shareBonus).add(userInvest.levelReward);
 		require(sendValue > 0, "you profit is 0");
 
 		userInvest.staticBonus = 0;
 		userInvest.shareBonus = 0;
 		userInvest.levelReward = 0;
-		userInvest.freeAmount = 0;
 
 		address payable userAddress = msg.sender;
 		sendValue = sendValue.min(address(this).balance);
